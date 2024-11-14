@@ -1,20 +1,5 @@
 from django.db import models
 
-class PosicionamientoEnEquipo ():
-
-class Nacionalidad ():
-
-class Videojuegos ():
-
-class Equipos ():
-
-class CampeonesLol():
-
-class ArmasCsGo():
-
-class RolDeEquipoCsgo():
-
-class RolDeEquipoLol():
 
 # PLAYERS
 class Player(models.Model):
@@ -24,7 +9,6 @@ class Player(models.Model):
     username = models.CharField(max_length=30, blank=True, null=True)
     edad = models.PositiveIntegerField(blank=True, null=True)
     fechadenacimiento = models.DateField(blank=True, null=True)
-    nacionalidad = models.IntegerChoices(blank=True, null=True) # Rellenar con opciones
     posicionglobal = models.IntegerField(blank=True, null=True)
 
     # Stats
@@ -35,16 +19,34 @@ class Player(models.Model):
     wr = models.FloatField(blank=True, null=True)
     kast = models.FloatField(blank=True, null=True)
 
+    #nacionalidad = models.IntegerChoices(blank=True, null=True) # Rellenar con opciones
+
+#class PosicionamientoEnEquipo ():
+
+#class Nacionalidad ():
+
+#class Videojuegos ():
+
+#class Equipos ():
+
+#class CampeonesLol():
+
+#class ArmasCsGo():
+
+#class RolDeEquipoCsgo():
+
+#class RolDeEquipoLol():
+
     # Relacion entre clases
-    videojuego = models.ForeignKey()
-    equipoactual = models.ForeignKey()
-    equiposdecarrera = models.ManyToManyField()
-    fechadeingresoalequipoactual = models.DateField()
-    campeonfavoritouno = models.ForeignKey()
-    campeonfavoritodos = models.ForeignKey()
-    campeonfavoritotres = models.ForeignKey()
-    armafavorita = models.ForeignKey()
-    roldeequipo = models.ForeignKey()
+    #videojuego = models.ForeignKey()
+    #equipoactual = models.ForeignKey()
+    #equiposdecarrera = models.ManyToManyField()
+    #fechadeingresoalequipoactual = models.DateField()
+    #campeonfavoritouno = models.ForeignKey()
+    #campeonfavoritodos = models.ForeignKey()
+    #campeonfavoritotres = models.ForeignKey()
+    #armafavorita = models.ForeignKey()
+    #roldeequipo = models.ForeignKey()
 
 
     def __str__(self):

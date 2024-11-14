@@ -14,7 +14,7 @@ SECRET_KEY = 'django-insecure-7a_^ulr6)0hx403uf&w$h0vhd(tgbkx&wt@vr%#d1#nz0e+n$+
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    ''
+    '127.0.0.1',
 ]
 
 
@@ -54,7 +54,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['C:/Users/tomas/Desktop/Bet/backend/backend/login/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -113,3 +113,7 @@ STATIC_URL = 'static/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Redireccion al iniciar sesión
+LOGIN_REDIRECT_URL = 'http://127.0.0.1:8000/'
