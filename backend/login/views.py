@@ -18,9 +18,9 @@ def Registrarse(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            # Crear el usuario sin guardar aún para añadir el email
+            
             user = form.save(commit=False)
-            # Añadir el correo electrónico
+            
             user.email = request.POST.get('email')
             user.save()
             messages.success(request, "Tu cuenta ha sido creada exitosamente. Ahora puedes iniciar sesión.")
