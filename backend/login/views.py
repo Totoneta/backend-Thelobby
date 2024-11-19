@@ -1,34 +1,40 @@
-from django.shortcuts import render
-from django.contrib.auth.views import LoginView
-from django.contrib.auth.forms import AuthenticationForm
-
-from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
-from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+import json
 
-
-# Create your views here.
-class IniciarSesion(LoginView):
-    template_name = 'iniciarsesion.html'
-    authentication_form = AuthenticationForm
-
-
+@csrf_exempt
 def Registrarse(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            
-            user = form.save(commit=False)
-            
-            user.email = request.POST.get('email')
-            user.save()
-            messages.success(request, "Tu cuenta ha sido creada exitosamente. Ahora puedes iniciar sesión.")
-            return redirect('IniciarSesion')
-        else:
-            messages.error(request, "Por favor, corrige los errores a continuación.")
-    else:
-        form = UserCreationForm()
-    
-    return render(request, 'registrarse.html', {'form': form})
+    if request.method == "POST":
+        data = json.loads(request.body)
+        username = data.get("username")
+        email = data.get("email")
+        password = data.get("password")
+        try:
+            if User.objects.filter(username=username).exists():
+                return JsonResponse({"error": "El usuario ya existe"}, status=400)
+            user = User.objects.create_user(username=username, email=email, password=password)
+            return JsonResponse({"success": "Usuario registrado correctamente"})
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+    return JsonResponse({"error": "Método no permitido"}, status=405)
 
+@csrf_exempt
+def IniciarSesion(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        username = data.get("username")
+        password = data.get("password")
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return JsonResponse({"success": "Sesión iniciada", "token": "session_active"})
+        return JsonResponse({"error": "Credenciales inválidas"}, status=400)
+    return JsonResponse({"error": "Método no permitido"}, status=405)
+
+def cerrar_sesion(request):
+    if request.method == "POST":
+        logout(request)
+        return JsonResponse({"success": "Sesión cerrada"})
+    return JsonResponse({"error": "Método no permitido"}, status=405)
