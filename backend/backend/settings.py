@@ -16,7 +16,9 @@ DEBUG = True
 #HOSTS
 ALLOWED_HOSTS = [
     '127.0.0.1',
-    'localhost'
+    'localhost',
+    "http://localhost:5173",
+    "http://localhost:8000",
 ]
 
 # DJANGORESTFRAMEWORK JWT
@@ -34,27 +36,20 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 # Application definition
-DEFAULT_APPS = [
+INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-]
-
-OTHERS_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
-]
-
-PROJECT_APPS = [
-    'api',
     'login',
+    'api',
+    'django_extensions',
 ]
-
-INSTALLED_APPS = OTHERS_APPS + DEFAULT_APPS + PROJECT_APPS
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',

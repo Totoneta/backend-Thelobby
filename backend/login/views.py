@@ -1,4 +1,3 @@
-from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, logout
 
@@ -32,12 +31,18 @@ def iniciar_sesion(request):
     password = data.get("password")
 
     user = authenticate(request, username=username, password=password)
+
     if user is not None:
         refresh = RefreshToken.for_user(user)
+        user_data = {
+            "username": user.username,
+        }
+
         return Response({
             "success": "Sesión iniciada",
             "access": str(refresh.access_token),
             "refresh": str(refresh),
+            "usuario": user_data,
         }, status=status.HTTP_200_OK)
     return Response({"error": "Credenciales inválidas"}, status=status.HTTP_400_BAD_REQUEST)
 
