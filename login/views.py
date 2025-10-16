@@ -16,6 +16,8 @@ def registrarse(request):
     email = data.get("email")
     password = data.get("password")
     nacionalidad = data.get("nacionalidad")
+    juegoprimero = data.get("juegoprimero")
+    juegoprimeronivel = data.get("juegoprimeronivel")
 
     # Validaciones
     if User.objects.filter(username=username).exists():
@@ -33,6 +35,8 @@ def registrarse(request):
             username=username,
             nombre=nombre,
             nacionalidad=nacionalidad,
+            juegoprimero=juegoprimero,
+            juegoprimeronivel=juegoprimeronivel,
         )
 
         return Response({"success": "Usuario registrado correctamente"}, status=status.HTTP_201_CREATED)

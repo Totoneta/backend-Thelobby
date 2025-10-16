@@ -21,7 +21,6 @@ def perfil_usuario(request):
 
     if request.method == 'GET':
         serializer = DatosUsuariosSerializer(usuario)
-        print(f"Datos recibidos: {request.data}")
         return Response(serializer.data)
 
     elif request.method == 'PUT':
@@ -59,13 +58,23 @@ class AmistadViewSet(viewsets.ViewSet):
     @action(detail=True, methods=['post'])
     def enviar_solicitud(self, request, pk=None):
         usuario_recibido = Usuario.objects.get(pk=pk)
-        usuario_actual = request.user.usuario  # Obtienes el usuario actual de la sesión
+        usuario_actual = request.user.usuario 
 
+        # Auto envío de solicitud
         if usuario_actual == usuario_recibido:
             return Response({"detail": "No puedes enviarte una solicitud a ti mismo."}, status=status.HTTP_400_BAD_REQUEST)
-
+    
+        # Solicitud enviada entre usuarios
         if Amistad.objects.filter(usuario1=usuario_actual, usuario2=usuario_recibido, estado='pendiente').exists():
             return Response({"detail": "Ya has enviado una solicitud de amistad."}, status=status.HTTP_400_BAD_REQUEST)
+        if Amistad.objects.filter(usuario1=usuario_recibido, usuario2=usuario_actual, estado='pendiente').exists():
+            return Response({"detail": "Ya hay una solicitud pendiente."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Realción activa entre usuarios
+        if Amistad.objects.filter(usuario1=usuario_actual, usuario2=usuario_recibido, estado='aceptada').exists():
+            return Response({"detail": "Ya estas en una relación de amistad con este usuario."}, status=status.HTTP_400_BAD_REQUEST)
+        if Amistad.objects.filter(usuario1=usuario_recibido, usuario2=usuario_actual, estado='aceptada').exists():
+            return Response({"detail": "Ya estas en una relación de amistad con este usuario."}, status=status.HTTP_400_BAD_REQUEST)
         
         # Crear la solicitud de amistad
         amistad = Amistad.objects.create(usuario1=usuario_actual, usuario2=usuario_recibido)
@@ -77,7 +86,9 @@ class AmistadViewSet(viewsets.ViewSet):
     @action(detail=True, methods=['post'])
     def aceptar_solicitud(self, request, pk=None):
         usuario_actual = request.user.usuario
+        usuario_recibido = Usuario.objects.get(pk=pk)
         solicitud = Amistad.objects.filter(usuario2=usuario_actual, usuario1__id=pk, estado='pendiente').first()
+        print(solicitud)
 
         if not solicitud:
             return Response({"detail": "No tienes una solicitud pendiente de este usuario."}, status=status.HTTP_400_BAD_REQUEST)

@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Usuario(models.Model):
+    
     # Definir las opciones de países
     class Nacionalidad(models.TextChoices):
         ARGENTINA = 'AR'
@@ -22,16 +23,19 @@ class Usuario(models.Model):
         
     # Conección con User
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='usuario')
+    
     # Datos del Usuario
     username = models.CharField(max_length=40, blank=False, null=False, name='username', default='')
     nombre = models.CharField(max_length=40, blank=False, null=False, name='nombre')
-    nacionalidad = models.CharField( 
+    nacionalidad = models.CharField(  
+        max_length=20,
         choices=Nacionalidad.choices, 
         blank=False, 
         null=False,
         default='AR',
     )
-    juegoprimero = models.CharField(
+    juegoprimero = models.CharField( 
+        max_length=20,
         choices=Juegos.choices,
         blank=False,
         null=False,

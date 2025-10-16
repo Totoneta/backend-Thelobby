@@ -1,6 +1,5 @@
 from pathlib import Path
 import os
-import dj_database_url
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -14,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-7a_^ulr6)0hx403uf&w$h0vhd(tgbkx&wt@vr%#d1#nz0e+n$+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 #HOSTS
 ALLOWED_HOSTS = [
@@ -48,7 +47,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'login',
     'api',
-    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -85,14 +83,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get("DATABASE_URL"),
-        conn_max_age=600,
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'SocialBBDD',
+        'USER': 'postgres',
+        'PASSWORD': 'tomas12345',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
+    }
 }
 
 
